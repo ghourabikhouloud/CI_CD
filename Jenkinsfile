@@ -11,7 +11,7 @@ pipeline {
         stage('Checkout Git repository') {
             steps {
                 echo 'Pulling'
-                git branch: 'khouloud', credentialsId: 'MyPersonalToken', url: 'https://github.com/aymeennefzi/CI-CD.git'            }
+                git branch: 'main', url: 'https://github.com/ghourabikhouloud/CI_CD.git'            }
         }
 
         stage('Maven Clean Compile') {
@@ -26,6 +26,12 @@ pipeline {
                             }
                         }
 
+ stage('OWASP Dependency Check') {
+            steps {
+                dependencyCheck additionalArguments: '--scan ./ ', odcInstallation: 'DP-Check'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
 
         stage('Build package') {
             steps {
